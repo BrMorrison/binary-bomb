@@ -7,15 +7,60 @@ are just on my local machine. These include:
  - The Qemu disk image generated from buildroot's rootfs output
 
 Things todo:
- - Add all of the dependencies and scripts to build them
+ -== Repo ==-
+ - Add all of the dependencies (i.e. buildroot) and scripts to build them
+ - Expand the build process so that it produces a distributable output that can
+   given to the players.
+
+ -== Busybox ==-
+ - Figure out busybox logging since it's going to the console right now,
+   which is annoying.
+ - Get auto-login working
+ - Do some custom overlays to modify files that we want to be non-default.
+   - /etc/inittab should automatically log in the user on the right serial port
+   - the sysctl or whatever could disable ASLR instead of having an init script
+ - Figure out how to get other files and configuration loaded into the rootfs
+   output.
+   - The bomb
+   - Instructions
+   - Init scripts for disabling ASLR
+
+ -== Bomb ==-
+ - Create detailed instructions/hints for each phase to guide the players.
+ - Create a tutorial (phase?) for basic gdb usage when the source is available.
+ - Finish the secret phase on RCE or scrap it.
+   - If we make the kernel module, we could have a secret code that gets sent
+     to it to disable it.
+ - We should make sure there's a way to restart the bomb with a signal or
+   something. We can have a custom gdb command for restarting it.
+
+ -== Linux/Qemu ==-
+ - We should make /etc/init.d scripts for disabling ASLR and starting the bomb
+   and other stuff like that.
+
+Looser ideas:
+ -== Repo ==-
  - Create an init script that will start up everything easily.
    - Start up qemu with two serial ports (input/output and gdbserver)
    - This should include a tmux script that creates two panes for the two
      serial ports and enables mouse support for changing between the panes.
- - Create detailed instructions/hints for each phase to guide the players.
- - Create a tutorial (phase?) for basic gdb usage when the source is available.
  - Create a dockerfile that manages the dependecies needed for the exercies.
    - qemu-system-arm
    - gdb-multiarch
    - gcc-arm-linux-gnueabihf (or at least binutils)
    - tmux (optional for the init script)
+
+ -== Busybox ==-
+ - We should create a bomb-diffusal user that can read the guides but can't
+   modify the bomb.
+
+ -== Bomb ==-
+ - Create a randomizer script that can be run at init or on explosion.
+   - It should add some randomness to the passwords of each phase so that
+     everyone has to solve their own stuff.
+
+ -== Linux/Qemu ==-
+ - Should we have a serial port dedicated to the bomb and have a separate one
+   for all of the users actual operations with the linux system.
+ - Create a kernel module to represent the "bomb" (track lives and phases
+   completed)
