@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Steps:
+#  1. copy the output from buildroot to the bin directory
+#  2. run qemu with the right parameters
+
+# TODO: I might need to check that bin exists first
+rm -r bin/
+mkdir bin/
+cp buildroot/output/images/* bin/
+qemu-system-arm -M virt -cpu cortex-a15 -m 256 -kernel bin/zImage -append "root=/dev/vda" -drive file=bin/rootfs.ext2,format=raw,index=0,media=disk -serial stdio -nographic -monitor none

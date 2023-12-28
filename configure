@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Shallow clone the submodule
+git submodule update --depth 1 --init
