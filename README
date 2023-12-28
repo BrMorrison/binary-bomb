@@ -1,0 +1,21 @@
+Binary Bomb
+===========
+
+IMPORTANT: This doesn't work yet!!! It has a lot of dependencies that currently
+are just on my local machine. These include:
+ - Buildroot and it's outputs (notably the linux VM)
+ - The Qemu disk image generated from buildroot's rootfs output
+
+Things todo:
+ - Add all of the dependencies and scripts to build them
+ - Create an init script that will start up everything easily.
+   - Start up qemu with two serial ports (input/output and gdbserver)
+   - This should include a tmux script that creates two panes for the two
+     serial ports and enables mouse support for changing between the panes.
+ - Create detailed instructions/hints for each phase to guide the players.
+ - Create a tutorial (phase?) for basic gdb usage when the source is available.
+ - Create a dockerfile that manages the dependecies needed for the exercies.
+   - qemu-system-arm
+   - gdb-multiarch
+   - gcc-arm-linux-gnueabihf (or at least binutils)
+   - tmux (optional for the init script)
