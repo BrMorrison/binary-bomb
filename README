@@ -6,59 +6,59 @@ are just on my local machine. These include:
  - Buildroot and it's outputs (notably the linux VM)
  - The Qemu disk image generated from buildroot's rootfs output
 
-Things todo:
+Things todo before release:
  -== Repo ==-
- - Add all of the dependencies (i.e. buildroot) and scripts to build them
  - Expand the build process so that it produces a distributable output that can
    given to the players.
 
  -== Busybox ==-
- - Figure out busybox logging since it's going to the console right now,
-   which is annoying.
- - Get auto-login working
- - Do some custom overlays to modify files that we want to be non-default.
-   - /etc/inittab should automatically log in the user on the right serial port
-   - the sysctl or whatever could disable ASLR instead of having an init script
  - Figure out how to get other files and configuration loaded into the rootfs
    output.
    - The bomb
    - Instructions
-   - Init scripts for disabling ASLR
 
  -== Bomb ==-
  - Create detailed instructions/hints for each phase to guide the players.
- - Create a tutorial (phase?) for basic gdb usage when the source is available.
- - Find a way to get the bomb to print the guide for each phase when it's diffused.
- - Finish the secret phase on RCE or scrap it.
+   - For the initial release, there will probably just be a single unified
+     guide that will be distributed with the bomb binary.
+ - Make sure phase 5 works, or rewrite it in assembly
+ - Finish the secret phase on ACE or scrap it.
    - If we make the kernel module, we could have a secret code that gets sent
      to it to disable it.
- - We should make sure there's a way to restart the bomb with a signal or
-   something. We can have a custom gdb command for restarting it.
 
  -== Linux/Qemu ==-
- - We should make /etc/init.d scripts for disabling ASLR and starting the bomb
-   and other stuff like that.
+ - Add an additional serial port to the qemu startup command so that it can be
+   used by the gdbserver.
 
-Looser ideas:
+Improvement Backlog
  -== Repo ==-
  - Create an init script that will start up everything easily.
    - Start up qemu with two serial ports (input/output and gdbserver)
    - This should include a tmux script that creates two panes for the two
      serial ports and enables mouse support for changing between the panes.
- - Create a dockerfile that manages the dependecies needed for the exercies.
+ - Create a dockerfile that manages the dependencies needed for the exercises.
    - qemu-system-arm
    - gdb-multiarch
    - gcc-arm-linux-gnueabihf (or at least binutils)
-   - tmux (optional for the init script)
+   - tmux (optional for the custom UI)
+ - Fix typo in buildroot external tree (I wrote diffusal instead of defusal).
 
  -== Busybox ==-
- - We should create a bomb-diffusal user that can read the guides but can't
+ - We should create a bomb-defusal user that can read the guides but can't
    modify the bomb.
+ - Figure out busybox logging since it's going to the console right now,
+   which is annoying.
+   - Something might be wrong with syslogd. There's an error about it during
+     shutdown
 
  -== Bomb ==-
  - Create a randomizer script that can be run at init or on explosion.
    - It should add some randomness to the passwords of each phase so that
      everyone has to solve their own stuff.
+ - Find a way to get the bomb to print the guide for each phase when it's diffused.
+ - We should make sure there's a way to restart the bomb with a signal or
+   something. We can have a custom gdb command for restarting it.
+ - Create a tutorial (phase?) for basic gdb usage when the source is available.
 
  -== Linux/Qemu ==-
  - Should we have a serial port dedicated to the bomb and have a separate one
