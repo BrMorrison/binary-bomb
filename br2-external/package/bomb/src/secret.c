@@ -86,7 +86,7 @@ void phase_5(void) {
 }
 
 void secret_phase(void) {
-    // Have them overwrite the stack to perform RCE in order to jump to a
+    // Have them overwrite the stack to perform ACE in order to jump to a
     // specific function
     char buf[BUF_SIZE];
     gets(buf);

@@ -1,0 +1,1 @@
+Phase 2 is similar to phase 1, but it's more complicated. This one just involves looking at and understanding multiple conditionals that are applied to the password.

@@ -28,6 +28,7 @@ Things todo:
  -== Bomb ==-
  - Create detailed instructions/hints for each phase to guide the players.
  - Create a tutorial (phase?) for basic gdb usage when the source is available.
+ - Find a way to get the bomb to print the guide for each phase when it's diffused.
  - Finish the secret phase on RCE or scrap it.
    - If we make the kernel module, we could have a secret code that gets sent
      to it to disable it.

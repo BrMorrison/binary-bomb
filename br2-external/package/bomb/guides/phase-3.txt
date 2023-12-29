@@ -1,0 +1,1 @@
+Phases 3 and 4 are just about using a buffer overflow to mess with other data on the stack. They're basically the same, except phase 4 wants to make sure you preserve existing data on the stack and phase 3 lets you overwrite stuff willy-nilly.
