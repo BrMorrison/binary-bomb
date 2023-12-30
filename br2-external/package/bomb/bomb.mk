@@ -1,7 +1,7 @@
 # Buildroot makefile for the binary bomb
 
 BOMB_VERSION = 0.1
-BOMB_SITE = $(BOMB_PKGDIR)
+BOMB_SITE = $(BOMB_PKGDIR).
 BOMB_SITE_METHOD = local
 BOMB_INSTALL_TARGET = YES
 BOMB_INSTALL_IMAGES = YES
@@ -17,7 +17,7 @@ define BOMB_INSTALL_TARGET_CMDS
 endef
 
 define BOMB_INSTALL_IMAGES_CMDS
-	$(INSTALL) -D -m 0444 $(@D)/guide.txt $(BINARIES_DIR)/
+	$(INSTALL) -D -m 0664 $(@D)/guide.txt $(BINARIES_DIR)/
 endef
 
 $(eval $(generic-package))

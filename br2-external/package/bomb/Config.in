@@ -1,0 +1,4 @@
+config BR2_PACKAGE_BOMB
+    bool "binary-bomb"
+    help
+        The binary used for the bomb defusal game.
