@@ -17,9 +17,12 @@ bomb.o: src/bomb.c
 secret.o: src/secret.c
 	$(CC) $(COMMON_CFLAGS) -o secret.o src/secret.c 
 
+support.o: src/support.c
+	$(CC) $(COMMON_CFLAGS) -o support.o src/support.c 
+
 # TODO: Actually build the bomb binary
-bomb: bomb.o secret.o
-	$(CC) bomb.o secret.o -o bomb
+bomb: bomb.o secret.o support.o
+	$(CC) bomb.o secret.o support.o -o bomb
 
 # TODO: cat all the individual guides into a monolithic document
 guide.txt:

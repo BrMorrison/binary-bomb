@@ -5,6 +5,8 @@
 #  2. run qemu with the right parameters
 
 mkdir -p bin/
+# TODO: Need to add a check here to make sure we don't overwrite progress if
+# the player has already started playing.
 cp buildroot/output/images/* bin/
 qemu-system-arm -M virt -cpu cortex-a15 -m 256 \
     -kernel bin/zImage -append "root=/dev/vda console=ttyS0" \
