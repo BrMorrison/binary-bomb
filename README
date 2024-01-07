@@ -8,15 +8,9 @@ are just on my local machine. These include:
 
 Things todo before release:
  -== Repo ==-
- - Expand the build process so that it produces a distributable output that can
-   given to the players.
  - Add a license file for the repo
  - Fix the README so that it's not just a to-do list and actually tells you 
    what the project is and how to use it.
- - Improve the run script so that it doesn't overwrite progress if the player
-   has already started playing.
-   - This will likely be fixed by having a run script that doesn't pull from
-     the build output.
 
  -== Buildroot ==-
 
@@ -24,10 +18,9 @@ Things todo before release:
  - Create detailed instructions/hints for each phase to guide the players.
    - For the initial release, there will probably just be a single unified
      guide that will be distributed with the bomb binary.
- - Scrap the secret phase for MVP
+ - Test the secret phase to make sure it works.
 
  -== Linux/Qemu ==-
- - Fix the issue with backspaces during program execution.
 
 Improvement Backlog
  -== Repo ==-
