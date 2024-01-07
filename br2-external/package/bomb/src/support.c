@@ -21,7 +21,7 @@ void init_password_file(const char* password_file) {
 
     if (InFile == NULL) {
         fprintf(stderr, "Error: Could not open password file '%s'\n", password_file);
-        exit(1);
+        exit(EXIT_FAILURE);
     } else {
         printf("Started reading passwords from '%s'\n", password_file);
     }
@@ -41,7 +41,7 @@ void read_line(char* buf) {
     // give up.
     if (InFile == stdin) {
         fprintf(stderr, "Error: Encountered unexpected EOF on stdin.\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // If we were using a file, switch to stdin and retry.
@@ -53,10 +53,11 @@ void read_line(char* buf) {
 void phase_defused(void) {
     static int defuse_count = 0;
     defuse_count += 1;
-    if (defuse_count == NUM_PHASES) {
-        // TODO: Add a check for a password if they're at the final phase.
-        // TODO: This doesn't print right since the "Phase x defused" gets printed after it
-        printf("Bomb defused! You've completed all of the phases... or have you?\n");
+    printf("Phase %d defused!\n", defuse_count);
+    if (defuse_count == NUM_PHASES + 1) {
+        printf("\nSUCCESS!!!\n");
+        printf("You completed the secret phase! The bomb is fully defused!\n");
+        exit(EXIT_SUCCESS);
     }
 }
 
@@ -67,5 +68,10 @@ void explode_bomb(void) {
     if (InFile != stdin) {
         fclose(InFile);
     }
-    exit(1);
+    exit(EXIT_FAILURE);
+}
+
+void prompt_password(void) {
+    printf("Password: ");
+    fflush(stdout);
 }

@@ -27,6 +27,7 @@ Things todo before release:
  - Scrap the secret phase for MVP
 
  -== Linux/Qemu ==-
+ - Fix the issue with backspaces during program execution.
 
 Improvement Backlog
  -== Repo ==-

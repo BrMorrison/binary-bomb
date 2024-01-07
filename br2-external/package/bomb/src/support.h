@@ -5,6 +5,7 @@ void explode_bomb(void);
 void phase_defused(void);
 void init_password_file(const char *);
 void read_line(char *);
+void prompt_password(void);
 
 void phase_1(void);
 void phase_2(void);

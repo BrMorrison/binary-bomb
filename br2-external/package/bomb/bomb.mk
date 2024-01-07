@@ -19,6 +19,7 @@ endef
 define BOMB_INSTALL_IMAGES_CMDS
 	$(INSTALL) -D -m 0777 $(@D)/bomb $(BINARIES_DIR)/
 	$(INSTALL) -D -m 0666 $(@D)/guide.txt $(BINARIES_DIR)/
+	$(INSTALL) -D -m 0666 $(@D)/src/bomb.c $(BINARIES_DIR)/
 endef
 
 $(eval $(generic-package))
