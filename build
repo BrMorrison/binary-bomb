@@ -1,23 +1,7 @@
 #!/usr/bin/env bash
 
-# Steps:
-#  1. Build the activity itself and copy to a location where buildroot can find it.
-#     (currently managed by CMake)
-#  2. Build buildroot
-#  3. Bundle the output in something that can easily be distributed and run.
-#     (This will probably be done by scripts)
-
-# TODO: Change this so that buildroot builds it for us
-cd br2-external/packages/bomb
-mkdir build
-cd build
-cmake ..
-make bomb
-cd ../../../../buildroot
-
 # Build buildroot
+cd buildroot
 defconfig=bomb-board_defconfig
 make BR2_EXTERNAL="../br2-external" "$defconfig"
 make
-
-# TODO: Package the game
