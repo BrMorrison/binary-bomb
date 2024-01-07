@@ -1,0 +1,64 @@
+Things todo before release:
+ -== Repo ==-
+
+ -== Buildroot ==-
+
+ -== Bomb ==-
+ - Create detailed instructions/hints for each phase to guide the players.
+   - Include instructions on how to connect the debugger and actually run the
+     game in the guide.
+   - For the initial release, there will probably just be a single unified
+     guide that will be distributed with the bomb binary.
+ - Test the secret phase to make sure it works.
+
+ -== Linux/Qemu ==-
+
+Improvement/Idea Backlog
+ -== Repo ==-
+ - Create an init script that will start up everything easily.
+   - Start up qemu with two serial ports (input/output and gdbserver)
+   - This should include a tmux script that creates two panes for the two
+     serial ports and enables mouse support for changing between the panes.
+ - Create a dockerfile that manages the dependencies needed for the exercises.
+   - qemu-system-arm
+   - gdb-multiarch
+   - gcc-arm-linux-gnueabihf (or at least binutils)
+   - tmux (optional for the custom UI)
+
+ -== Buildroot ==-
+ - We should create a bomb-defusal user that can read the guides but can't
+   modify the bomb.
+ - Figure out busybox logging since it's going to the console right now,
+   which is annoying.
+   - Something might be wrong with syslogd. There's an error about it during
+     shutdown
+
+ -== Bomb ==-
+ - Create a randomizer script that can be run at init or on explosion.
+   - It should add some randomness to the passwords of each phase so that
+     everyone has to solve their own stuff.
+   - If we do this, we'll have to find a way to solve the issue that the local
+     copy of the binary won't be randomized, which will cause issues with
+     debugging.
+ - Create a bombd server that manages things like tracking the defusal status
+   (phases completed, explosions, etc.)
+   - This can help with the logistics of the secret phase, because the users
+     can write code that sends a special key to the bomb-server.
+   - This could help with the dynamic guide deployment since the server could
+     provide new guides as each additional phase is unlocked.
+   - There could also be a 'status' client for viewing the defusal stats.
+ - Find a way to get the bomb to print the guide for each phase when it's
+   diffused.
+ - We should make sure there's a way to restart the bomb with a signal or
+   something. We can have a custom gdb command for restarting it.
+ - Create a tutorial (phase?) for basic gdb usage when the source is available.
+ - Finish the secret phase on ACE or scrap it.
+   - If we make the kernel module, we could have a secret code that gets sent
+     to it to disable it.
+
+ -== Linux/Qemu ==-
+ - Should we have a serial port dedicated to the bomb and have a separate one
+   for all of the users actual operations with the linux system.
+ - Create a kernel module to represent the "bomb" (track lives and phases
+   completed)
+   - Note: This shouldn't be needed if we go with the bomb server idea.

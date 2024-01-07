@@ -1,73 +1,51 @@
 Binary Bomb
 ===========
 
-IMPORTANT: This doesn't work yet!!! It has a lot of dependencies that currently
-are just on my local machine. These include:
- - Buildroot and it's outputs (notably the linux VM)
- - The Qemu disk image generated from buildroot's rootfs output
+This is a game about reverse-engineering based on a lab that is used in some
+university courses. The idea of the game is that players are given a binary 
+executable that prompts them for passwords. When a correct password is entered,
+the player moves to the next phase and is prompted for the next password. If the
+player enters a wrong password, the bomb will "explode." Once all the phases
+have been completed, the player wins.
 
-Things todo before release:
- -== Repo ==-
- - Add a license file for the repo
- - Fix the README so that it's not just a to-do list and actually tells you 
-   what the project is and how to use it.
+In order to determine the correct passwords, the player must use a debugger to
+step through the program to understand the criteria for each password.
 
- -== Buildroot ==-
 
- -== Bomb ==-
- - Create detailed instructions/hints for each phase to guide the players.
-   - For the initial release, there will probably just be a single unified
-     guide that will be distributed with the bomb binary.
- - Test the secret phase to make sure it works.
+Building
+========
 
- -== Linux/Qemu ==-
+To build the game and the Linux system it runs in, simply execute:
+`./configure`
+`./build`
+The build takes a really long time to complete, but once it's done you should be
+left with a bomb-game directory that has everything you need to run the game.
 
-Improvement Backlog
- -== Repo ==-
- - Create an init script that will start up everything easily.
-   - Start up qemu with two serial ports (input/output and gdbserver)
-   - This should include a tmux script that creates two panes for the two
-     serial ports and enables mouse support for changing between the panes.
- - Create a dockerfile that manages the dependencies needed for the exercises.
-   - qemu-system-arm
-   - gdb-multiarch
-   - gcc-arm-linux-gnueabihf (or at least binutils)
-   - tmux (optional for the custom UI)
 
- -== Buildroot ==-
- - We should create a bomb-defusal user that can read the guides but can't
-   modify the bomb.
- - Figure out busybox logging since it's going to the console right now,
-   which is annoying.
-   - Something might be wrong with syslogd. There's an error about it during
-     shutdown
+Running
+=======
 
- -== Bomb ==-
- - Create a randomizer script that can be run at init or on explosion.
-   - It should add some randomness to the passwords of each phase so that
-     everyone has to solve their own stuff.
-   - If we do this, we'll have to find a way to solve the issue that the local
-     copy of the binary won't be randomized, which will cause issues with
-     debugging.
- - Create a bombd server that manages things like tracking the defusal status
-   (phases completed, explosions, etc.)
-   - This can help with the logistics of the secret phase, because the users
-     can write code that sends a special key to the bomb-server.
-   - This could help with the dynamic guide deployment since the server could
-     provide new guides as each additional phase is unlocked.
-   - There could also be a 'status' client for viewing the defusal stats.
- - Find a way to get the bomb to print the guide for each phase when it's
-   diffused.
- - We should make sure there's a way to restart the bomb with a signal or
-   something. We can have a custom gdb command for restarting it.
- - Create a tutorial (phase?) for basic gdb usage when the source is available.
- - Finish the secret phase on ACE or scrap it.
-   - If we make the kernel module, we could have a secret code that gets sent
-     to it to disable it.
+Playing the game requires qemu-system-arm and an arm gdb program (you can use
+gdb-multiarch or the gdb built by buildroot as part of the build process).
 
- -== Linux/Qemu ==-
- - Should we have a serial port dedicated to the bomb and have a separate one
-   for all of the users actual operations with the linux system.
- - Create a kernel module to represent the "bomb" (track lives and phases
-   completed)
-   - Note: This shouldn't be needed if we go with the bomb server idea.
+The VM that contains the binary can be started with
+`./run`
+
+The details of how to connect the debugger and play the game are included in a
+separate README in the bomb-game directory since that must be distributed to the
+player for them to know how to play.
+
+
+Acknowledgements
+================
+
+This game is not my original idea. I played it as part of an online course
+called "The Hardware/Software Interface" around ten years ago, but could not
+find a publicly available version that I was happy with so I tried to recreate
+it from memory.
+
+In my search for the bomb lab, I did find this one from CMU
+https://github.com/kiliczsh/cmu-binary-bomb/tree/main, but it doesn't cover
+buffer overflow exploits in the same way and seemed less fun. However, I did
+reference it as I was writing some of the code for this game since the overall
+concept is very similar.
