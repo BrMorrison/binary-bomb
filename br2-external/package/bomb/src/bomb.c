@@ -29,5 +29,6 @@ int main(int argc, char *argv[]) {
 
     printf("Bomb defused! You've completed all of the phases... or have you?\n");
 
+    cleanup();
     return 0;
 }

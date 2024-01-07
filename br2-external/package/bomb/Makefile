@@ -6,9 +6,6 @@ COMMON_CFLAGS = -c -Og -fno-stack-protector
 PUBLIC_CFLAGS = -g
 
 .PHONY: all clean
-# TODO: We might want to do this in some kind of build directory so that it's
-# easier to have git ignore all of the outputs? Though I guess that doesn't
-# really matter if the actual build is happening in buildroot's tree.
 all: bomb guide.txt
 
 bomb.o: src/bomb.c
@@ -20,13 +17,12 @@ secret.o: src/secret.c
 support.o: src/support.c
 	$(CC) $(COMMON_CFLAGS) -o support.o src/support.c 
 
-# TODO: Actually build the bomb binary
 bomb: bomb.o secret.o support.o
 	$(CC) bomb.o secret.o support.o -o bomb
 
 # TODO: cat all the individual guides into a monolithic document
-guide.txt:
-	touch guide.txt
+guide.txt: guides/readme.txt guides/phase-1.txt guides/phase-2.txt guides/phase-3.txt guides/phase-4.txt guides/phase-5.txt guides/secret-phase.txt
+	cat guides/readme.txt guides/phase-1.txt guides/phase-2.txt guides/phase-3.txt guides/phase-4.txt guides/phase-5.txt guides/secret-phase.txt > guide.txt
 
 clean:
 	rm -f bomb guide.txt *.o

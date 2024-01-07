@@ -1,1 +1,8 @@
-Phases 5 and 6 are going to involve abusing an exploint where the return address is stored on the stack (because of the use of the LR in the ARM ABI, I may have to write these phases by hand in assembly, but that's fine). The important thing here is going to be picking an address to jump to and making sure that the data is being properly written onto the stack to get you there.
+----------------------
+- Bomb Phase 5 Guide -
+----------------------
+
+Solving phase 5 involves exploiting the fact that the return address is saved
+to the stack to control where the execution resumes from after the function
+returns.
+

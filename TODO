@@ -4,11 +4,6 @@ Things todo before release:
  -== Buildroot ==-
 
  -== Bomb ==-
- - Create detailed instructions/hints for each phase to guide the players.
-   - Include instructions on how to connect the debugger and actually run the
-     game in the guide.
-   - For the initial release, there will probably just be a single unified
-     guide that will be distributed with the bomb binary.
  - Test the secret phase to make sure it works.
 
  -== Linux/Qemu ==-

@@ -11,6 +11,12 @@
 
 static FILE* InFile = NULL;
 
+void cleanup(void) {
+    if (InFile != stdin) {
+        fclose(InFile);
+    }
+}
+
 void init_password_file(const char* password_file) {
     if (password_file == NULL) {
         InFile = stdin;
@@ -57,6 +63,7 @@ void phase_defused(void) {
     if (defuse_count == NUM_PHASES + 1) {
         printf("\nSUCCESS!!!\n");
         printf("You completed the secret phase! The bomb is fully defused!\n");
+        cleanup();
         exit(EXIT_SUCCESS);
     }
 }
@@ -65,9 +72,7 @@ void explode_bomb(void) {
     printf("\nBOOOOOOM!!!\n");
     printf("The bomb exploded :(\n");
 
-    if (InFile != stdin) {
-        fclose(InFile);
-    }
+    cleanup();
     exit(EXIT_FAILURE);
 }
 

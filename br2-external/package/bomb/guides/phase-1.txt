@@ -1,1 +1,7 @@
-Solving phase 1 should be easy. The player will just need to know how to set up breakpoints or step into the function, and then they'll need to know how to examine the password string using the x command.
+----------------------
+- Bomb Phase 1 Guide -
+----------------------
+
+To solve phase 1 the player will need to know how to create breakpoints, step
+through code, and use the `x` command in gdb to examine the contents of memory.
+
