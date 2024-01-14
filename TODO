@@ -1,10 +1,16 @@
 Things todo before release:
  -== Repo ==-
+ - Create a tutorial that can help people learn how to use gdb
+   - Write the section of the guide about getting into gdb with gdbserver
 
  -== Buildroot ==-
 
  -== Bomb ==-
- - Test the secret phase to make sure it works.
+ - Fix secret phase
+   - Enable stack execution with kernel parameter (noexec=off)
+   - Do a consecutive if-block structure to prevent jumps to the conditional
+   - Add a parameter to phase defused?
+ - Move phases 3-5 into bomb.c so that people can see the code.
 
  -== Linux/Qemu ==-
 

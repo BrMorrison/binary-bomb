@@ -1,1 +1,2 @@
 source "$BR2_EXTERNAL_BOMB_DEFUSAL_PATH/package/bomb/Config.in"
+source "$BR2_EXTERNAL_BOMB_DEFUSAL_PATH/package/tutorial/Config.in"

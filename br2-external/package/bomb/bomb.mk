@@ -6,8 +6,7 @@ BOMB_SITE_METHOD = local
 BOMB_INSTALL_TARGET = YES
 BOMB_INSTALL_IMAGES = YES
 
-# This command is just taken from the example, but I don't know if $(MAKE) and
-# $(TARGET_CONFIGURE_OPTS) are actually defined.
+# This command is just taken from the example in the buildroot docs.
 define BOMB_BUILD_CMDS
 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 endef

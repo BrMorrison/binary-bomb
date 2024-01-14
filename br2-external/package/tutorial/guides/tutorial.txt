@@ -1,0 +1,218 @@
+Starting the Tutorial
+=====================
+
+[TODO]: Copy instructions from the bomb's readme for getting everything set up
+and starting gdb.
+
+
+Resetting the Tutorial
+=====================
+
+[TODO]: Make it clear that this is "just in case" info and not instructions.
+By default gdb doesn't let you step backwards through code (it's possible to
+configure but we aren't going to cover that here), so if you make a mistake and
+skip over something, you'll have to restart the tutorial from the beginning.
+This can be accomplished with the run command.
+
+`(gdb) run`
+
+This will restart the program, but won't remove any of your breakpoints, so
+getting back to where you were should be pretty easy.
+
+Getting to Main
+================
+
+Now that the program is started and the debugger is attached, the first thing
+we should do is create a breakpoint with the [b]reak command.
+
+`(gdb) b main`
+
+Also, add a couple more breakpoints that will help you out later on.
+
+`(gdb) b examining_data`
+`(gdb) b secret_func`
+
+Now that we've created the breakpoint, gdb will stop the program's execution
+whenever it gets to the `main()` function. We can see that happen if we tell gdb
+to continue running the program with the [c]ontinue command.
+
+`(gdb) c`
+
+The continue command will run the program until a breakpoint is hit, the
+program terminates, or some other exceptional event occurs. If you accidentally
+run the continue command without setting a breakpoint first, you can stop the
+program execution by hitting CTRL+C, which should bring you back to the gdb
+prompt.
+
+NOTE: In the above commands, `b` and `c` are aliases for `break` and `continue`
+respectively. You can type out the whole word if you prefer. Lots of gdb
+commands have aliases like this. You can see all of the aliases command, along
+with other helpful info by using the `help` command.
+
+`(gdb) help c`
+
+
+Seeing Code and the TUI
+=======================
+
+In order to debug our program, we need to see what it's doing. One way to
+accomplish this is to use the `list` command, which will print out some source
+code around the current spot in the program, but this can be inconvenient. As
+you're starting out I strongly recommend using the Terminal User Interface (TUI)
+mode that's built into gdb.
+
+`(gdb) tui enable`
+
+There are some short-comings to the TUI mode; notably, it's hard to access your
+command history and it doesn't play well with programs that print to the screen
+(which doesn't affect us here since the program's output will go to a separate
+serial port), but it's my preferred way of using gdb.
+
+The TUI mode has a number of different views that can be changed using the
+`layout` command (see `help layout` for more details). For this exercise, you
+might find the `asm` and `regs` layout to be helpful at times.
+
+
+Stepping Through Code
+=====================
+
+The three most important gdb commands to know for navigating through your code
+are [s]tep, [n]ext, and [fin]ish. Step will move the program forward by one line
+of source code and will step _into_ function calls. Next will also move the
+program forward by one line of source code, but it step _over_ function calls.
+Lastly, finish will execute until the end of the current function call.
+
+For the remainder of this section, just follow the instructions in the comments
+of the code (which should be visible if you're in the TUI mode).
+
+NOTE: As you step through code, you don't have to keep typing `s` and `n`,
+simply hitting the ENTER key will re-run the last command.
+
+NOTE: If you want to step by more than one line at a time, you can provide the
+number of steps to take as an optional parameter to both `step` and `next`. As
+always, you can get more details with `help`.
+
+
+Examining Data
+==============
+
+Stepping through your code will only get you so far if you don't know what data
+your program is working with. The two main commands that will help you with this
+are [p]rint and x (short for examine).
+
+Print will print the value of just about any C expression (including the results
+of function calls). Some examples:
+
+`(gdb) p val`
+`(gdb) p val * 55`
+`(gdb) p (float)val / 1.73`
+
+x is similar, but examines the contents of memory at the provided address. We'll
+talk about x more and give some examples on the next section about working with
+assembly.
+
+Both print and x allow you to provide a format parameter that controls how the
+data gets displayed (signed, hexadecimal, string, etc.). It's important, but
+I'm not going to go into the details here. You can learn more with `help` or
+from the cheat sheet that I link at the end of this document.
+
+You can get past this section of code by running
+
+`(gdb) p secret_string`
+
+and typing that string into the terminal window you have running the vm.
+
+
+Working with Assembly
+=====================
+
+The last major thing you'll need to understand to complete the exercise is how
+to work with assembly code in gdb. If you aren't confident in your ARM assembly
+skills, don't worry-- ChatGPT can do the heavy lifting for you. The contents of
+this section will just tell you how to examine and navigate assembly in gdb so
+that a friend or AI chatbot can explain it to you.
+
+For this part of the tutorial, step into the `secret_func()` function. If you're
+using the TUI view, gdb will tell you that it doesn't have any source for the
+code being run, which isn't helpful so switch to the assembly layout.
+
+`(gdb) layout asm`
+
+Also, at this point the [s]tep and [n]ext instructions are going to be useless
+since they operate on lines of source code. Instead you'll need to use the
+`si` ([s]tep[i]nstruction) and `ni` ([n]ext[i]nstruction) commands, which will
+move you forward by one assembly instruction. Note that in ARM assembly function
+calls will look like
+
+`bl <address | symbol>`
+
+NOTE: `bl` is short for "branch and link," which will jump to the PC-relative
+address and save the return address in the link register (lr).
+
+Another problem with assembly language is that we no longer have named local
+variables. Instead if we want to see local data, we have to look at registers,
+which can be done with the `info` command:
+
+`(gdb) info registers`
+
+If you only want to look at a single register, you can still use the [p]rint
+command, you just need to use `$` to specify a register:
+
+`(gdb) p $r0`
+`(gdb) p/x $sp`
+
+Okay, with that out of the way, we can now try to solve the puzzle.
+
+You can't see it, but the code in `secret_func()` is very similar to the code
+in the section about examining data. It will continuously prompt the user for
+a password and only return `true` if that password matches the expected value.
+We can get past this by navigating to the call to `strncmp` and looking at the
+arguments passed to the function. 
+
+Start by stepping to the line that looks like this (yours might be slightly
+different).
+
+`0x10678 <secret_func+84>        bl      0x103b4 <strcmp@plt> `
+
+NOTE: In order to get to this string compare function call, you might need to
+type in a password to get past the call to `fgets`. But since `secret_func` is
+called in a loop, you can just enter a junk password the first time and then use
+the real password on the next iteration.
+
+Once we're there, we can examine the first two arguments to the function using
+the x command:
+
+`(gdb) x/s $r0`
+`(gdb) x/s $r1`
+
+One of these arguments is going to be the local buffer where the provided string
+will be stored, so that won't be interesting, but the other argument should be
+the string we want to match it to!
+
+From here, you can just enter `c` to continue running the program, enter the
+required password in the other window, and the tutorial will run to completion!
+
+And that's it! With that you should have everything you need to try defusing the
+binary bomb! I've provided a couple additional resources below that I recommend
+you look at, but good luck!
+
+
+The Callstack
+==============
+
+gdb has a number of command that can be used to navigate the callstack. They
+aren't too important for this exercise, but they're good to know-- especially
+if you ever need to use gdb in the wild.
+
+`where` will show you where in the callstack you are (can be helpful for
+figuring out how many times you need to use `finish` to get back to code you
+care about) and the `frame` command lets you navigate between stack frames
+(check `help frame` to learn more).
+
+
+Cheat Sheet
+===========
+I'd encourage you to skim through this cheat sheet (it covers some useful
+commands I left out) and keep it handy throughout the exercise in case you want
+to reference something:
+https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf

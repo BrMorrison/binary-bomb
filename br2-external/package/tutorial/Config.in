@@ -1,0 +1,4 @@
+config BR2_PACKAGE_TUTORIAL
+    bool "bomb-tutorial"
+    help
+        The a tutorial for the bomb defusal game
