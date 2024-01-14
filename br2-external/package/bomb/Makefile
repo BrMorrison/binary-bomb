@@ -18,9 +18,8 @@ support.o: src/support.c
 	$(CC) $(COMMON_CFLAGS) -o support.o src/support.c 
 
 bomb: bomb.o secret.o support.o
-	$(CC) bomb.o secret.o support.o -o bomb
+	$(CC) -z execstack -o bomb bomb.o secret.o support.o
 
-# TODO: cat all the individual guides into a monolithic document
 guide.txt: guides/readme.txt guides/phase-1.txt guides/phase-2.txt guides/phase-3.txt guides/phase-4.txt guides/phase-5.txt guides/secret-phase.txt
 	cat guides/readme.txt guides/phase-1.txt guides/phase-2.txt guides/phase-3.txt guides/phase-4.txt guides/phase-5.txt guides/secret-phase.txt > guide.txt
 

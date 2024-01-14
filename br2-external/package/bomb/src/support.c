@@ -7,9 +7,11 @@
 // intentionally trigger buffer overflows, so I'm picking a size that should be
 // significantly longer than any of the required input.
 #define MAX_LINE 2048
+#define MAX_PASSWORD 32
 #define NUM_PHASES 5
 
 static FILE* InFile = NULL;
+static char last_password[MAX_PASSWORD] = "";
 
 void cleanup(void) {
     if (InFile != stdin) {
@@ -40,6 +42,10 @@ void read_line(char* buf) {
     if (fgets(buf, MAX_LINE, InFile) != NULL) {
         // Replace trailing control characters with a terminator.
         buf[strcspn(buf, "\r\n")] = '\0';
+
+        // Copy the password that we read. This is used for controlling access
+        // to the secret phase.
+        strncpy(last_password, buf, MAX_PASSWORD);
         return;
     }
 
@@ -56,11 +62,27 @@ void read_line(char* buf) {
     read_line(buf);
 }
 
-void phase_defused(void) {
+void phase_defused(int n) {
     static int defuse_count = 0;
     defuse_count += 1;
+
+    // Try and catch any funny business.
+    if (defuse_count != n) {
+        printf("\nCHEATER!!! Shame on you for trying to mess with the program!\n");
+        explode_bomb();
+    }
+
     printf("Phase %d defused!\n", defuse_count);
-    if (defuse_count == NUM_PHASES + 1) {
+
+    if (defuse_count == NUM_PHASES) {
+        if (strncmp(last_password, "Gimme secrets!", MAX_PASSWORD) == 0) {
+            secret_phase();
+            explode_bomb();
+        } else {
+            printf("Bomb defused! You've completed all of the phases... or have you?\n");
+        }
+    }
+    else if (defuse_count == NUM_PHASES + 1) {
         printf("\nSUCCESS!!!\n");
         printf("You completed the secret phase! The bomb is fully defused!\n");
         cleanup();
@@ -76,7 +98,7 @@ void explode_bomb(void) {
     exit(EXIT_FAILURE);
 }
 
-void prompt_password(void) {
-    printf("Password: ");
+void prompt_password(int phase) {
+    printf("Phase %d: ", phase);
     fflush(stdout);
 }

@@ -1,0 +1,8 @@
+
+            -------------------------------------
+            - Welcome to the bomb defusal game! -
+            -------------------------------------
+
+Run `gdbserver /dev/ttyS0 tutorial` to start debugging the tutorial or
+`gdbserver /dev/ttyS0 bomb [password_file]` to start debugging the bomb game.
+

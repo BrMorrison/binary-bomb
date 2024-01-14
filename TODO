@@ -6,25 +6,15 @@ Things todo before release:
  -== Buildroot ==-
 
  -== Bomb ==-
- - Fix secret phase
-   - Enable stack execution with kernel parameter (noexec=off)
-   - Do a consecutive if-block structure to prevent jumps to the conditional
-   - Add a parameter to phase defused?
- - Move phases 3-5 into bomb.c so that people can see the code.
 
  -== Linux/Qemu ==-
 
 Improvement/Idea Backlog
  -== Repo ==-
- - Create an init script that will start up everything easily.
-   - Start up qemu with two serial ports (input/output and gdbserver)
-   - This should include a tmux script that creates two panes for the two
-     serial ports and enables mouse support for changing between the panes.
  - Create a dockerfile that manages the dependencies needed for the exercises.
    - qemu-system-arm
    - gdb-multiarch
    - gcc-arm-linux-gnueabihf (or at least binutils)
-   - tmux (optional for the custom UI)
 
  -== Buildroot ==-
  - We should create a bomb-defusal user that can read the guides but can't
@@ -41,6 +31,9 @@ Improvement/Idea Backlog
    - If we do this, we'll have to find a way to solve the issue that the local
      copy of the binary won't be randomized, which will cause issues with
      debugging.
+     - Ideally, the randomizer would run on the VM and copy the binary back to
+       the host after updating it. That would prevent us from having libelf as
+       a dependency or distributing x86 executables.
  - Create a bombd server that manages things like tracking the defusal status
    (phases completed, explosions, etc.)
    - This can help with the logistics of the secret phase, because the users
@@ -50,9 +43,6 @@ Improvement/Idea Backlog
    - There could also be a 'status' client for viewing the defusal stats.
  - Find a way to get the bomb to print the guide for each phase when it's
    diffused.
- - We should make sure there's a way to restart the bomb with a signal or
-   something. We can have a custom gdb command for restarting it.
- - Create a tutorial (phase?) for basic gdb usage when the source is available.
  - Finish the secret phase on ACE or scrap it.
    - If we make the kernel module, we could have a secret code that gets sent
      to it to disable it.
