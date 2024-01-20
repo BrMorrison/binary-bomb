@@ -18,7 +18,7 @@ endef
 define TUTORIAL_INSTALL_IMAGES_CMDS
 	mkdir -p $(BINARIES_DIR)/tutorial
 	$(INSTALL) -D -m 0777 $(@D)/tutorial $(BINARIES_DIR)/tutorial/
-	$(INSTALL) -D -m 0666 $(@D)/tutorial.txt $(BINARIES_DIR)/tutorial/
+	$(INSTALL) -D -m 0666 $(@D)/tutorial.html $(BINARIES_DIR)/tutorial/
 	$(INSTALL) -D -m 0666 $(@D)/src/tutorial.c $(BINARIES_DIR)/tutorial/
 endef
 

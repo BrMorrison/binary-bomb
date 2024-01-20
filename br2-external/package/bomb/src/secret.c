@@ -32,27 +32,6 @@ void phase_2(void) {
     }
 }
 
-void phase_4(void) {
-    // Now they'll have to overwrite the buffer here while having buf also be
-    // a normal string that matches a second password
-    char second_password[5] = "bomb";
-    char buf[BUF_SIZE];
-    prompt_password(4);
-    read_line(buf);
-
-    // Make sure the first password is good.
-    int strings_different = strcmp(buf, "there's no escape :)");
-    if (strings_different) {
-        explode_bomb();
-    }
-
-    // Check the second password too.
-    strings_different = strcmp(second_password, "safe");
-    if (strings_different) {
-        explode_bomb();
-    }
-}
-
 void secret_phase(void) {
     // Have them overwrite the stack to perform ACE in order to jump to a
     // specific function

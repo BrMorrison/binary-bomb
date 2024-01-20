@@ -1,0 +1,11 @@
+=== Bomb Phase 5 Guide
+
+Solving phase 5 involves exploiting the fact that the return address is saved to the stack during a
+function call. At the end of the function call, the return address is popped into the Program
+Counter (PC) register and the continues executing code from there.
+If this stored return address were to get overwritten, then it would change where the program
+starts executing from after the function.
+
+An important note for this phase is that ARM machines are little-endian, so the 4-byte word
+0x0badcafe, would be stored in memory as 0xfe, 0xca, 0xad, 0x0b.
+

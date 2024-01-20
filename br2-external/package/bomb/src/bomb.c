@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 #include "support.h"
 
 #define BUF_SIZE 32
 
-// Phases 3 and 5 are more interesting when you can see the source code.
+// Phases 3-5 are more interesting when you can see the source code.
 void phase_3(void) {
     volatile int bypass_bomb = 0;
     char buf[BUF_SIZE];
@@ -15,7 +16,28 @@ void phase_3(void) {
     }
 }
 
+void phase_4(void) {
+    // Now there are two passwords that have to match!
+    char second_password[5] = "bomb";
+    char buf[BUF_SIZE];
+    prompt_password(4);
+    read_line(buf);
+
+    // Make sure the first password is good.
+    int strings_different = strcmp(buf, "there's no escape :)");
+    if (strings_different) {
+        explode_bomb();
+    }
+
+    // Check the second password too.
+    strings_different = strcmp(second_password, "safe");
+    if (strings_different) {
+        explode_bomb();
+    }
+}
+
 void phase_5(void) {
+    // We don't need to do much here. We'll explode the bomb when we return.
     char buf[BUF_SIZE];
     prompt_password(5);
     read_line(buf);
@@ -39,7 +61,7 @@ int main(int argc, char *argv[]) {
     phase_defused(4);
 
     phase_5();
-    // Add an explosion here just to be safe :)
+    // Have an explosion here, just to be safe :)
     explode_bomb();
     phase_defused(5);
 

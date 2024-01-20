@@ -1,0 +1,14 @@
+=== Phase 4
+
+Phase 4 is where things get interesting. To solve this phase, you'll need to manipulate the stack
+in a way that's more precisely than what was required for phase 3.
+Specifically, you will need to enter a password that contains non-printable characters. The easiest
+way to do this is with a passwords file and the `printf` command.
+For example, to append the hex value 0xdeadbeef to the end of a file called `passwords.txt` you can
+run
+
+`printf "\xde\xad\xbe\xef\x00" >> passwords.txt`
+
+Note: When writing binary data to a text file like this, I recommend that you add a null terminator
+to the end of the line with \x00 to assist with string manipulations that the program might do.
+

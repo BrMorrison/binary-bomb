@@ -1,0 +1,5 @@
+=== Phase 3
+
+For phase 3-5 the source code is provided, but in order to solve these phases you'll have to
+exploit buffer overflow vulnerabilities in the program to manipulate data on the stack.
+

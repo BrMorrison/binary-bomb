@@ -1,7 +1,5 @@
 Things todo before release:
  -== Repo ==-
- - Create a tutorial that can help people learn how to use gdb
-   - Write the section of the guide about getting into gdb with gdbserver
 
  -== Buildroot ==-
 
@@ -19,10 +17,6 @@ Improvement/Idea Backlog
  -== Buildroot ==-
  - We should create a bomb-defusal user that can read the guides but can't
    modify the bomb.
- - Figure out busybox logging since it's going to the console right now,
-   which is annoying.
-   - Something might be wrong with syslogd. There's an error about it during
-     shutdown
 
  -== Bomb ==-
  - Create a randomizer script that can be run at init or on explosion.
@@ -42,7 +36,7 @@ Improvement/Idea Backlog
      provide new guides as each additional phase is unlocked.
    - There could also be a 'status' client for viewing the defusal stats.
  - Find a way to get the bomb to print the guide for each phase when it's
-   diffused.
+   defused.
  - Finish the secret phase on ACE or scrap it.
    - If we make the kernel module, we could have a secret code that gets sent
      to it to disable it.

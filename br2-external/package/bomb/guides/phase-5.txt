@@ -1,8 +1,0 @@
-----------------------
-- Bomb Phase 5 Guide -
-----------------------
-
-Solving phase 5 involves exploiting the fact that the return address is saved
-to the stack to control where the execution resumes from after the function
-returns.
-

@@ -1,7 +1,0 @@
-----------------------
-- Bomb Phase 3 Guide -
-----------------------
-
-To solve phase 3 and beyond, the player will need to do buffer overflow
-exploits to manipulate data on the stack.
-

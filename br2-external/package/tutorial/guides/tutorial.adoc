@@ -1,26 +1,53 @@
-Starting the Tutorial
-=====================
+== GDB Tutorial
 
-[TODO]: Copy instructions from the bomb's readme for getting everything set up
-and starting gdb.
+If you're coming here from the main guide, you should already have the tutorial
+program running in gdb. If you aren't there, go back and run through the steps
+for starting the program and connecting the debugger.
 
 
-Resetting the Tutorial
-=====================
+=== Getting Out of Trouble
 
-[TODO]: Make it clear that this is "just in case" info and not instructions.
-By default gdb doesn't let you step backwards through code (it's possible to
-configure but we aren't going to cover that here), so if you make a mistake and
-skip over something, you'll have to restart the tutorial from the beginning.
-This can be accomplished with the run command.
+As a CLI debugger, gdb isn't the most user-friendly and there are many ways to
+get your program into a state that you don't want it in. The point of this
+section is to give you tips for getting out of these situations.
 
-`(gdb) run`
+==== "The program is running and I can't get to the gdb command prompt"
+If this happens to you, just hit
 
-This will restart the program, but won't remove any of your breakpoints, so
-getting back to where you were should be pretty easy.
+CTRL+C
 
-Getting to Main
-================
+and gdb should stop the program and give you a command prompt.
+
+==== "I want to restart the program from the beginning"
+This can be done with the `run` command, which will restart the program.
+
+`(gdb) run [args]`
+
+Note: If you wan to run the program with some arguments, you may need to pass
+those arguments to the run command.
+
+==== "I want to kill the program on the VM"
+You can stop the program with
+
+`(gdb) monitor exit`
+
+If you try running CTRL+C on the VM, you'll kill the entire VM instead of just
+the program that's running.
+Once you start the program in gdbserver again, you'll need to run the
+`target extended-remote <device>` command again to reconnect to the server.
+
+==== "I want to exit gdb"
+You can do this with CTRL+D or by running
+
+`(gdb) quit`
+
+"I want to learn more about a command in gdb"
+Use the help command to get more info about a command.
+
+`(gdb) help <command>`
+
+
+=== Getting to Main
 
 Now that the program is started and the debugger is attached, the first thing
 we should do is create a breakpoint with the [b]reak command.
@@ -52,8 +79,7 @@ with other helpful info by using the `help` command.
 `(gdb) help c`
 
 
-Seeing Code and the TUI
-=======================
+=== Seeing Code and the TUI
 
 In order to debug our program, we need to see what it's doing. One way to
 accomplish this is to use the `list` command, which will print out some source
@@ -73,8 +99,7 @@ The TUI mode has a number of different views that can be changed using the
 might find the `asm` and `regs` layout to be helpful at times.
 
 
-Stepping Through Code
-=====================
+=== Stepping Through Code
 
 The three most important gdb commands to know for navigating through your code
 are [s]tep, [n]ext, and [fin]ish. Step will move the program forward by one line
@@ -93,8 +118,7 @@ number of steps to take as an optional parameter to both `step` and `next`. As
 always, you can get more details with `help`.
 
 
-Examining Data
-==============
+=== Examining Data
 
 Stepping through your code will only get you so far if you don't know what data
 your program is working with. The two main commands that will help you with this
@@ -123,8 +147,7 @@ You can get past this section of code by running
 and typing that string into the terminal window you have running the vm.
 
 
-Working with Assembly
-=====================
+=== Working with Assembly
 
 The last major thing you'll need to understand to complete the exercise is how
 to work with assembly code in gdb. If you aren't confident in your ARM assembly
@@ -197,22 +220,32 @@ binary bomb! I've provided a couple additional resources below that I recommend
 you look at, but good luck!
 
 
-The Callstack
-==============
+=== The Call Stack
 
-gdb has a number of command that can be used to navigate the callstack. They
+gdb has a number of command that can be used to navigate the call stack. They
 aren't too important for this exercise, but they're good to know-- especially
 if you ever need to use gdb in the wild.
 
-`where` will show you where in the callstack you are (can be helpful for
+`where` will show you where in the call stack you are (can be helpful for
 figuring out how many times you need to use `finish` to get back to code you
 care about) and the `frame` command lets you navigate between stack frames
 (check `help frame` to learn more).
 
 
-Cheat Sheet
-===========
+=== Cheat Sheet
+
 I'd encourage you to skim through this cheat sheet (it covers some useful
 commands I left out) and keep it handy throughout the exercise in case you want
 to reference something:
 https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
+
+
+=== Leaving the Tutorial
+
+Once you're done, you can kill the tutorial by running
+
+`(gdb) monitor exit`
+`(gdb) quit`
+
+From there you can restart the gdbserver and gdb client using the bomb program
+to play the main game.

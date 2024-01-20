@@ -1,7 +1,0 @@
-----------------------
-- Bomb Phase 2 Guide -
-----------------------
-
-Phase 2 is similar to phase 1, but more complex. It requires a closer
-examination of the disassembly in order to solve.
-

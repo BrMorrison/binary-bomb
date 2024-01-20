@@ -1,7 +1,0 @@
-----------------------
-- Bomb Phase 1 Guide -
-----------------------
-
-To solve phase 1 the player will need to know how to create breakpoints, step
-through code, and use the `x` command in gdb to examine the contents of memory.
-
