@@ -7,44 +7,54 @@ for starting the program and connecting the debugger.
 
 === Getting Out of Trouble
 
-As a CLI debugger, gdb isn't the most user-friendly and there are many ways to
-get your program into a state that you don't want it in. The point of this
-section is to give you tips for getting out of these situations.
+Before we begin, I want to take a minute to cover how to work through some
+common issues you might encounter with gdb.
+As a CLI debugger, gdb isn't the most user-friendly program and there are many
+ways to get into a state that you don't want to be in. The rest of this
+section will give you some tips for getting out of these situations.
 
 ==== "The program is running and I can't get to the gdb command prompt"
 If this happens to you, just hit
 
-CTRL+C
+`CTRL+C`
 
 and gdb should stop the program and give you a command prompt.
 
 ==== "I want to restart the program from the beginning"
 This can be done with the `run` command, which will restart the program.
 
-`(gdb) run [args]`
+----
+(gdb) run [args]
+----
 
-Note: If you wan to run the program with some arguments, you may need to pass
-those arguments to the run command.
+NOTE: If you wan to run the program with some arguments, you'll need to pass
+those arguments to the run command (at least for this exercise).
 
-==== "I want to kill the program on the VM"
+==== "I want to exit the program being debugged"
 You can stop the program with
 
-`(gdb) monitor exit`
+----
+(gdb) monitor exit
+----
 
 If you try running CTRL+C on the VM, you'll kill the entire VM instead of just
 the program that's running.
-Once you start the program in gdbserver again, you'll need to run the
-`target extended-remote <device>` command again to reconnect to the server.
+Once you start the program in gdbserver again, you'll need to rerun the
+`target extended-remote <device>` command in gdb to reconnect to the server.
 
 ==== "I want to exit gdb"
 You can do this with CTRL+D or by running
 
-`(gdb) quit`
+----
+(gdb) quit
+----
 
-"I want to learn more about a command in gdb"
+==== "I want to learn more about a command in gdb"
 Use the help command to get more info about a command.
 
-`(gdb) help <command>`
+----
+(gdb) help <command>
+----
 
 
 === Getting to Main
@@ -52,18 +62,24 @@ Use the help command to get more info about a command.
 Now that the program is started and the debugger is attached, the first thing
 we should do is create a breakpoint with the [b]reak command.
 
-`(gdb) b main`
+----
+(gdb) b main
+----
 
 Also, add a couple more breakpoints that will help you out later on.
 
-`(gdb) b examining_data`
-`(gdb) b secret_func`
+----
+(gdb) b examining_data
+(gdb) b secret_func
+----
 
 Now that we've created the breakpoint, gdb will stop the program's execution
 whenever it gets to the `main()` function. We can see that happen if we tell gdb
 to continue running the program with the [c]ontinue command.
 
-`(gdb) c`
+----
+(gdb) c
+----
 
 The continue command will run the program until a breakpoint is hit, the
 program terminates, or some other exceptional event occurs. If you accidentally
@@ -75,7 +91,6 @@ NOTE: In the above commands, `b` and `c` are aliases for `break` and `continue`
 respectively. You can type out the whole word if you prefer. Lots of gdb
 commands have aliases like this. You can see all of the aliases command, along
 with other helpful info by using the `help` command.
-
 `(gdb) help c`
 
 
@@ -87,16 +102,17 @@ code around the current spot in the program, but this can be inconvenient. As
 you're starting out I strongly recommend using the Terminal User Interface (TUI)
 mode that's built into gdb.
 
-`(gdb) tui enable`
+----
+(gdb) tui enable
+----
 
-There are some short-comings to the TUI mode; notably, it's hard to access your
-command history and it doesn't play well with programs that print to the screen
-(which doesn't affect us here since the program's output will go to a separate
-serial port), but it's my preferred way of using gdb.
+There are some short-comings to the TUI mode (notably, it's hard to access your
+command history and it doesn't play well with programs that print to the screen),
+but it's my preferred way of using gdb.
 
 The TUI mode has a number of different views that can be changed using the
 `layout` command (see `help layout` for more details). For this exercise, you
-might find the `asm` and `regs` layout to be helpful at times.
+might find the `asm` and `regs` layout to be helpful at different points.
 
 
 === Stepping Through Code
@@ -127,24 +143,31 @@ are [p]rint and x (short for examine).
 Print will print the value of just about any C expression (including the results
 of function calls). Some examples:
 
-`(gdb) p val`
-`(gdb) p val * 55`
-`(gdb) p (float)val / 1.73`
+----
+(gdb) p val
+(gdb) p val * 55
+(gdb) p (float)val / 1.73
+----
 
 x is similar, but examines the contents of memory at the provided address. We'll
 talk about x more and give some examples on the next section about working with
 assembly.
 
-Both print and x allow you to provide a format parameter that controls how the
+NOTE: Both print and x allow you to provide a format parameter that controls how the
 data gets displayed (signed, hexadecimal, string, etc.). It's important, but
 I'm not going to go into the details here. You can learn more with `help` or
 from the cheat sheet that I link at the end of this document.
 
-You can get past this section of code by running
+If you step into the `examining_data()` function (or try to step over it since
+we previously put a breakpoint there), you'll see that it wants you to enter a
+password that matches the `secret_string` value. You can see what this value is
+by running.
 
-`(gdb) p secret_string`
+----
+(gdb) p secret_string
+----
 
-and typing that string into the terminal window you have running the vm.
+and typing that string into the terminal window you have running the VM.
 
 
 === Working with Assembly
@@ -159,30 +182,35 @@ For this part of the tutorial, step into the `secret_func()` function. If you're
 using the TUI view, gdb will tell you that it doesn't have any source for the
 code being run, which isn't helpful so switch to the assembly layout.
 
-`(gdb) layout asm`
+----
+(gdb) layout asm
+----
 
 Also, at this point the [s]tep and [n]ext instructions are going to be useless
 since they operate on lines of source code. Instead you'll need to use the
 `si` ([s]tep[i]nstruction) and `ni` ([n]ext[i]nstruction) commands, which will
-move you forward by one assembly instruction. Note that in ARM assembly function
-calls will look like
+move you forward by one assembly instruction stepping into and over function
+calls respectively.
 
-`bl <address | symbol>`
-
-NOTE: `bl` is short for "branch and link," which will jump to the PC-relative
-address and save the return address in the link register (lr).
+NOTE: In ARM assembly function calls will look like `bl <address | symbol>`,
+where `bl` is short for "branch and link." This will jump to the specified
+location and save the return address in the link register (lr).
 
 Another problem with assembly language is that we no longer have named local
 variables. Instead if we want to see local data, we have to look at registers,
 which can be done with the `info` command:
 
-`(gdb) info registers`
+----
+(gdb) info registers
+----
 
 If you only want to look at a single register, you can still use the [p]rint
 command, you just need to use `$` to specify a register:
 
-`(gdb) p $r0`
-`(gdb) p/x $sp`
+----
+(gdb) p $r0
+(gdb) p/x $sp
+----
 
 Okay, with that out of the way, we can now try to solve the puzzle.
 
@@ -193,9 +221,11 @@ We can get past this by navigating to the call to `strncmp` and looking at the
 arguments passed to the function. 
 
 Start by stepping to the line that looks like this (yours might be slightly
-different).
+different, but there will be a branch and link to `strcmp`).
 
-`0x10678 <secret_func+84>        bl      0x103b4 <strcmp@plt> `
+----
+0x10678 <secret_func+84>        bl      0x103b4 <strcmp@plt>
+----
 
 NOTE: In order to get to this string compare function call, you might need to
 type in a password to get past the call to `fgets`. But since `secret_func` is
@@ -205,8 +235,10 @@ the real password on the next iteration.
 Once we're there, we can examine the first two arguments to the function using
 the x command:
 
-`(gdb) x/s $r0`
-`(gdb) x/s $r1`
+----
+(gdb) x/s $r0
+(gdb) x/s $r1
+----
 
 One of these arguments is going to be the local buffer where the provided string
 will be stored, so that won't be interesting, but the other argument should be
@@ -222,7 +254,7 @@ you look at, but good luck!
 
 === The Call Stack
 
-gdb has a number of command that can be used to navigate the call stack. They
+gdb has a number of commands that can be used to navigate the call stack. They
 aren't too important for this exercise, but they're good to know-- especially
 if you ever need to use gdb in the wild.
 
@@ -244,8 +276,12 @@ https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
 
 Once you're done, you can kill the tutorial by running
 
-`(gdb) monitor exit`
-`(gdb) quit`
+----
+(gdb) monitor exit
+(gdb) quit
+----
 
-From there you can restart the gdbserver and gdb client using the bomb program
-to play the main game.
+From there you can go back to the "Debugging in the VM" section of the
+link:../guide.html[guide] and rerun the steps for hooking up the debugger, but
+using the main `bomb` program this time.
+

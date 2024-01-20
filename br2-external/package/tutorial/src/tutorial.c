@@ -25,7 +25,8 @@ int examining_data() {
     buf[strcspn(buf, "\r\n")] = '\0';
 
     // The function will return true when the input matches `secret_string`
-    return (strncmp(buf, secret_string, MAX_STRING) == 0);
+    int strings_equal = strncmp(buf, secret_string, MAX_STRING) == 0;
+    return strings_equal;
 }
 
 int main(int argc, char *argv[]) {
@@ -42,11 +43,15 @@ int main(int argc, char *argv[]) {
     // Now try stepping over it.
     foo(val);
 
-    // printf is a library function. We'll almost always want to step over it.
+    // printf is a library function. We'll almost always want to step over it
+    // with [n]ext.
     printf("GDB is fun!\n");
 
-    // You'll have to enter the secret string value to get past here!
-    // Read the "Examining Data" section of the tutorial to learn more.
+    // For to get past the next part you'll need to read the "Examining Data"
+    // section of the tutorial.
+
+    // `examining_data()` will prompt you for a secret string and you'll have
+    // to use gdb to figure out the correct value and get past this loop.
     while (!examining_data()) {
         ; // Do nothing until the function returns true.
     }

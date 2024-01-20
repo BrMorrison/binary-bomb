@@ -45,7 +45,8 @@ void phase_5(void) {
 
 
 int main(int argc, char *argv[]) {
-
+    // This opens and starts reading from the password file if the user
+    // provided one. You can just step over it.
     init_password_file(argc > 1 ? argv[1] : NULL);
 
     phase_1();

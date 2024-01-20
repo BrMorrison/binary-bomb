@@ -21,24 +21,15 @@ In order to play the game, you will need the following programs installed on you
 
 To start the vm, simply run
 
-`./run_script.sh`
+----
+./run_script.sh
+----
 
 This will take you to a bash shell where you can work.
 
-NOTE: that when you start the VM, you should see a message talking about a "char device" like 
+NOTE: When you start the VM, you should see a message talking about a "char device" like 
 `char device redirected to /dev/pts/5 (label gdb)`.  Keep track of this, you'll need that info
 later when starting gdb.
-
-
-=== Running the Bomb
-
-The bomb program lives in /usr/bin/bomb and optionally takes the path to a text file with passwords
-as an argument. It can be run as
-
-`bomb [password_file]`
-
-When a password file is provided, the program will read passwords from the file until it reaches
-the end and then it will switch back to using standard input to get passwords from the user.
 
 
 === Debugging in the VM
@@ -46,24 +37,31 @@ the end and then it will switch back to using standard input to get passwords fr
 To debug a program in the virtual machine, you'll need to use gdbserver connected to the /dev/ttyS0
 serial port in the VM. The command for this is
 
-`gdbserver /dev/ttyS0 <program> [args]`
+----
+gdbserver /dev/ttyS0 <program> [args]
+----
 
-If you don't have much experience using gdb, it is recommended that you start with the interactive
+If you don't have much experience using gdb, I recommend that you start with the interactive
 tutorial provided with this game. If you want to skip the tutorial, substitute `bomb` for
 `tutorial` in the following commands.
 
-`gdbserver /dev/ttyS0 tutorial`
+----
+gdbserver /dev/ttyS0 tutorial
+----
 
-Once that is running, you'll need to start gdb on your host machine
+Once that is running, you'll need to start gdb in a new terminal on your host machine
 
-`gdb-multiarch tutorial/tutorial`
-(Note: it's `gdb-multiarch bomb` for the main game)
+----
+gdb-multiarch tutorial/tutorial
+----
 
 From there, the last step is connect gdb program on the host machine to the gdbserver running in
 the VM. To do this, you'll need the char device value that the VM printed out when it started up
 (in my case it was /dev/pts/5).
 
-`(gdb) target extended-remote <your_char_dev_value>`
+----
+(gdb) target extended-remote <your_char_dev_value>
+----
 
 At this point, everything should be connected and ready to go. If you want to go through the
 tutorial, open the link:tutorial/tutorial.html[tutorial] and read through that.
@@ -78,16 +76,33 @@ Using remote gdb can be a bit weird, so here are some notes on starting and stop
 
 If the program terminates, you should be able to restart it by running
 
-`(gdb) r [arguments]`
+----
+(gdb) r [arguments]
+----
 
 at the gdb prompt, where `[arguments]` is an optional list of arguments for the program.
 
 If you want gdbserver to stop running in the VM, you can stop it by running
 
-`(gdb) monitor exit`
+----
+(gdb) monitor exit
+----
 
 from the gdb command prompt. Though you may need to re-run the `target extened-remote` command from
 gdb if you restart the gdbserver.
+
+
+=== Running the Bomb
+
+The bomb program lives in /usr/bin/bomb and optionally takes the path to a text file with passwords
+as an argument. It can be run as
+
+----
+bomb [password_file]
+----
+
+When a password file is provided, the program will read passwords from the file until it reaches
+the end and then it will switch back to using standard input to get passwords from the user.
 
 
 == Phase Guides

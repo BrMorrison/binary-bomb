@@ -7,8 +7,12 @@ way to do this is with a passwords file and the `printf` command.
 For example, to append the hex value 0xdeadbeef to the end of a file called `passwords.txt` you can
 run
 
-`printf "\xde\xad\xbe\xef\x00" >> passwords.txt`
+----
+printf "\xde\xad\xbe\xef\x00" >> passwords.txt
+----
 
 Note: When writing binary data to a text file like this, I recommend that you add a null terminator
 to the end of the line with \x00 to assist with string manipulations that the program might do.
+
+To read files that contain binary data, you can use the `xxd` program to generate a hex dump.
 
